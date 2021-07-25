@@ -11,13 +11,44 @@
 	<artifactId>shopping</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
-	
+
 	<modules>
-        <module>shopping-admin</module>
-    </modules>
+		<module>shopping-admin</module>
+		<module>shopping-security</module>
+	</modules>
 
 	<properties>
 		<java.version>8</java.version>
+		<jjwt.version>0.11.2</jjwt.version>
 	</properties>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
+
+	<dependencyManagement>
+		<dependencies>
+			<!--jwt -->
+			<dependency>
+				<groupId>io.jsonwebtoken</groupId>
+				<artifactId>jjwt-api</artifactId>
+				<version>${jjwt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.jsonwebtoken</groupId>
+				<artifactId>jjwt-impl</artifactId>
+				<version>${jjwt.version}</version>
+			</dependency>
+			<dependency>
+				<groupId>io.jsonwebtoken</groupId>
+				<artifactId>jjwt-jackson</artifactId> <!-- or jjwt-gson if Gson is preferred -->
+				<version>${jjwt.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 
 </project>
