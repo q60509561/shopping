@@ -1,7 +1,6 @@
-package com.jason.shoppingsecurity.auth;
+package com.jason.shopping.security.auth;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Map;
 
 import javax.servlet.FilterChain;
@@ -12,16 +11,19 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.jason.shoppingsecurity.util.JWTUtil;
+import com.jason.shopping.security.util.JWTUtil;
 
 public class JWTAuthenticationFilter extends OncePerRequestFilter {
 
 	@Autowired
-	private JWTUtil jwtService;
+	private JWTUtil jwtutil;
+	@Autowired
+	private UserDetailsService userDetailsService;
 
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
@@ -31,12 +33,14 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
 		if (authHeader != null) {
 			String accessToken = authHeader.replace("Bearer ", "");
 
-			Map<String, Object> claims = jwtService.parseToken(accessToken);
+			Map<String, Object> claims = jwtutil.parseToken(accessToken);
 			String account = (String) claims.get("account");
-	
-			UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(account, null,
-					Arrays.asList(new SimpleGrantedAuthority((String)claims.get("role"))));
-			SecurityContextHolder.getContext().setAuthentication(authentication);
+			if (account != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+				UserDetails userDetails = this.userDetailsService.loadUserByUsername(account);
+				UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+						userDetails, null, userDetails.getAuthorities());
+				SecurityContextHolder.getContext().setAuthentication(authentication);
+			}
 		}
 
 		chain.doFilter(request, response);

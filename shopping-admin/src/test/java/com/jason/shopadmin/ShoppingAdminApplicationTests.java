@@ -8,6 +8,7 @@ class ShoppingAdminApplicationTests {
 
 	@Test
 	void contextLoads() {
+		
 	}
 
 }

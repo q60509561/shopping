@@ -1,4 +1,4 @@
-package com.jason.shoppingsecurity.util;
+package com.jason.shopping.security.util;
 
 import java.security.Key;
 import java.security.NoSuchAlgorithmException;

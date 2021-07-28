@@ -1,4 +1,4 @@
-package com.jason.shopadmin;
+package com.jason.shopping.admin;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
